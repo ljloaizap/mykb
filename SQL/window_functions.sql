@@ -84,3 +84,76 @@ SELECT
     salary,
     lead(salary, 2, -1) OVER (ORDER BY salary) AS next_next_salary
 FROM employee;
+
+
+-- More cases...
+DROP TABLE IF EXISTS races;
+CREATE TABLE races (
+  pilot_name varchar(100),
+  circuit_name varchar(30),
+  year int,
+  time_at time,
+  finish bool
+);
+
+INSERT INTO races VALUES('Alonso', 'Monza', 2016, '1:57:06.32'::time, true);
+INSERT INTO races VALUES('Hamilton', 'Monza', 2016, '1:51:54.28'::time, true);
+INSERT INTO races VALUES('Vetel', 'Monza', 2016, '1:52:04.12'::time, true);
+INSERT INTO races VALUES('Alonso', 'Montecarlo', 2016, '0:43:14.73'::time, false);
+INSERT INTO races VALUES('Hamilton', 'Montecarlo', 2016, '1:12:09.12'::time, true);
+INSERT INTO races VALUES('Vetel', 'Montecarlo', 2016, '0:21:54.73'::time, false);
+INSERT INTO races VALUES('Raikonen', 'Montecarlo', 2016, '1:14:04.12'::time, true);
+INSERT INTO races VALUES('Hamilton', 'Monza', 2017, '1:13:16.97'::time, true);
+INSERT INTO races VALUES('Vetel', 'Monza', 2017, '1:11:39.12'::time, true);
+INSERT INTO races VALUES('Raikonen', 'Montecarlo', 2017, '0:43:14.73'::time, false);
+INSERT INTO races VALUES('Alonso', 'Montecarlo', 2017, '1:32:14.42'::time, true);
+INSERT INTO races VALUES('Hamilton', 'Montecarlo', 2017, '0:43:14.73'::time, false);
+INSERT INTO races VALUES('Vetel', 'Montecarlo', 2017, '1:33:04.12'::time, true);
+
+
+-- Main average WF
+SELECT
+    pilot_name,
+    circuit_name,
+    year,
+    time_at,
+    AVG(time_at) OVER (PARTITION BY circuit_name)::time AS avg_circuit,
+    AVG(time_at) OVER (PARTITION BY circuit_name, year)::time AS avg_race
+FROM races
+WHERE finish
+ORDER BY year DESC, circuit_name, time_at;
+
+
+-- ------------------------------------------------------------------------
+-- *****  FIRST_VALUE, LAST_VALUE, NTH_VALUE  *****
+-- ------------------------------------------------------------------------
+
+-- Getting cool... query to obtain every pilot name, their time, 
+-- their position in the race, the time of the race winner
+-- and the delta time between this pilot and the winner.
+SELECT
+    pilot_name,
+    circuit_name,
+    year,
+    time_at AS pilot_time,
+    rank() OVER (PARTITION BY year, circuit_name ORDER BY time_at) AS pos_race,
+    first_value(time_at) OVER (PARTITION BY year, circuit_name ORDER BY time_at) AS race_winner_time,
+    (time_at - first_value(time_at) OVER (PARTITION BY year, circuit_name ORDER BY time_at))::time AS delta
+FROM races
+WHERE finish
+ORDER BY year desc, circuit_name, time_at;
+
+-- Another one...
+SELECT
+	pilot_name,
+	circuit_name,
+	year,
+	time_at AS pilot_time,
+	RANK() OVER (PARTITION BY circuit_name, year ORDER BY time_at) AS position,
+	FIRST_VALUE(pilot_name) OVER (PARTITION BY circuit_name, year ORDER BY time_at) AS winner_pilot,
+	LAST_VALUE(pilot_name)
+	    OVER (PARTITION BY circuit_name, year
+	          ORDER BY time_at ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS last_pilot
+FROM races
+WHERE finish
+ORDER BY year desc, circuit_name, time_at;
