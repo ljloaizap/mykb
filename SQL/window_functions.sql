@@ -3,7 +3,7 @@
 -- ########################################################################
 
 -- ------------------------------------------------------------------------
--- *****  RANK  *****
+-- *****  RANK & DENSE_RANK  *****
 -- ------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS employee;
@@ -23,17 +23,21 @@ INSERT INTO employee VALUES(105, 'Mareen Bisset', 'ACCOUNTS', 1200);
 INSERT INTO employee VALUES(106, 'Airton Graue', 'ACCOUNTS', 1100);
 INSERT INTO employee VALUES(201, 'Patricia Fernandz', 'ACCOUNTS', 1100);
 INSERT INTO employee VALUES(202, 'La pupuchurra', 'ACCOUNTS', 1000);
+INSERT INTO employee VALUES(203, 'Almando', 'ACCOUNTS', 1100);
 
 
+-- rank & dense_rank
 SELECT
     row_number() OVER (PARTITION BY department ORDER BY salary DESC ) as rn,
     rank() OVER (PARTITION BY department ORDER BY salary DESC) AS rank,
+    dense_rank() OVER (PARTITION BY department ORDER BY salary DESC) AS dense_rank,
     department,
     employee_id AS e_id,
     full_name,
     salary
 FROM employee;
 
+-- max as window function
 SELECT
     department,
     salary,
@@ -143,7 +147,7 @@ FROM races
 WHERE finish
 ORDER BY year desc, circuit_name, time_at;
 
--- Another one...
+-- Using sub-clause Order By / Rows between
 SELECT
 	pilot_name,
 	circuit_name,
@@ -153,7 +157,7 @@ SELECT
 	FIRST_VALUE(pilot_name) OVER (PARTITION BY circuit_name, year ORDER BY time_at) AS winner_pilot,
 	LAST_VALUE(pilot_name)
 	    OVER (PARTITION BY circuit_name, year
-	          ORDER BY time_at ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS last_pilot
+	        ORDER BY time_at ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS last_pilot
 FROM races
 WHERE finish
 ORDER BY year desc, circuit_name, time_at;
