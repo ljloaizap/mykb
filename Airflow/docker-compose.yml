@@ -1,0 +1,39 @@
+version: '3.7'
+services:
+  postgres:  # This is for the metadata database and should remain as it is
+    image: postgres
+    ports: 
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+
+  airflowcito:
+    image: apache/airflow:2.2.5
+    ports:
+      - "8080:8080"
+    #restart: always
+    depends_on:
+      - postgres
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql://airflow:airflow@postgres:5432/airflow
+      - AIRFLOW__CORE__LOAD_EX=1
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./airflow_shared:/opt/airflow/scripts
+    entrypoint: ./scripts/entrypoint.sh
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
