@@ -14,7 +14,7 @@ services:
         max-file: "3"
 
   airflowcito:
-    image: apache/airflow:2.2.5
+    image: apache/airflow:2.6.3
     ports:
       - "8080:8080"
     #restart: always
@@ -30,7 +30,7 @@ services:
         max-file: "3"
     volumes:
       - ./dags:/opt/airflow/dags
-      - ./airflow_shared:/opt/airflow/scripts
+      - ./shared:/opt/airflow/scripts
     entrypoint: ./scripts/entrypoint.sh
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
