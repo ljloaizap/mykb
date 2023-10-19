@@ -1,4 +1,5 @@
 .vscode
+/*/data_generator/data/
 
 Pipfile
 Pipfile.lock
