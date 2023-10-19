@@ -92,16 +92,27 @@ def generate_fake_report():
             print(
                 f'[{datetime.now().strftime("%Y-%m-%d %H:%M:%S:%f")}] Record created...')
 
-            # Wait for a random time between 1 and 4 seconds before creating the next record
-            sleep_time = random.uniform(0, 0.1)
-            time.sleep(sleep_time)
+            # Wait for a random time before creating the next record
+            time.sleep(get_sleep_time())
         except KeyboardInterrupt:
             # Stop the program when interrupted (e.g., using Ctrl+C)
             conn.close()
             sys.exit(1)
         except Exception as e:
-            print(f'There was an error: {type(e)}')
+            print(f'There was an error: {e=}')
             sys.exit(1)
+
+
+def get_sleep_time():
+    '''PH'''
+    random_part = int(random.uniform(1, 11))
+    if random_part in (1, 2, 3, 4, 5):
+        return random.uniform(0, 0.4)
+    if random_part in (6, 7, 8, 9):
+        return random.uniform(0.5, 4)
+    if random_part == 10:
+        return random.uniform(3, 10)
+    return random.uniform(11, 37)
 
 
 if __name__ == "__main__":
