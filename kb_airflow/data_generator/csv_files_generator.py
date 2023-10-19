@@ -4,13 +4,14 @@ from faker import Faker
 from sqlalchemy import create_engine
 import argparse
 import csv
+import math
 import os
 import pandas as pd
 import random
 
 
 load_dotenv()
-start_date = datetime(2023, 10, 18, 1, 20, 0)
+min_date = datetime(2023, 10, 18, 1, 20, 0)
 ENGINE = create_engine(os.getenv('DB_CONN_STR'))
 DIR_DATA = "./data/"  # Directory where the CSV reports will be saved
 
@@ -56,9 +57,10 @@ def generate_csv_file(ini_date: datetime, end_date: datetime, file_number: int, 
     print(message)
 
 
-def main(flg_force: bool):
+def main(flg_force: bool, flg_min_date: bool):
     '''PH'''
-    ini_date = start_date
+    flg_force = flg_force or not flg_min_date
+    ini_date = get_start_date(flg_min_date)
     file_number = 0
     while True:
         file_number += 1
@@ -71,11 +73,27 @@ def main(flg_force: bool):
             break
 
 
+def get_start_date(flg_min_date: bool):
+    '''PH'''
+
+    if flg_min_date:
+        return min_date
+
+    current_time = datetime.now()
+    new_minutes = math.floor(current_time.minute / 10) * 10
+    new_start_date = (current_time.replace(
+        minute=new_minutes, second=0) - timedelta(minutes=10))
+    return new_start_date
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Pythoncito to generate .CSV files for e-commerce products")
     parser.add_argument('-f', '--force',
                         action='store_true',
                         help='.CSV will be generated even if they already exist for N-interval')
+    parser.add_argument('-m', '--min_date',
+                        action='store_true',
+                        help='Data generation will start from the min date. If not, it will use now().')
     args = parser.parse_args()
-    main(args.force)
+    main(args.force, args.min_date)

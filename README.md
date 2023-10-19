@@ -17,14 +17,16 @@ sudo docker-compose unpause  #pause
 
 
 ## Emoji Base
-| Emoji | Github text | Description |
+| Emoji | Emoji name | Description |
 | :------: | -------------- | --------------- |
-| :heavy_plus_sign: | `:heavy_plus_sign:` | Add new feature |
+| :heavy_plus_sign: | `:heavy_plus_sign:` | Add new feature, e.g., new report |
 | :factory_worker: | `:factory_worker:` | _Work in progress..._ |
-| :memo: | `:memo:` | Modify existing functionalities |
-| :wrench: | `:wrench:` | Refactor & Clean-up |
+| :memo: | `:memo:` | Modify functionality like adding a new column |
+| :wrench: | `:wrench:` | Code Refactor. Ex: abstract class for _xyz_ topic |
+| :x: | `:x:` | Code removal. Ex: dropping a table no longer used |
+| :broom: | `:broom:` | Cleaning-up, such as unneeded comments, vars, etc. |
 | :writing_hand: | `:writing_hand:` | Update documentation |
-| :rescue_worker_helmet: | `:rescue_worker_helmet:` | Relevant bug fixing |
-| :broom: | `:broom:` | Tiny bug fixing |
-| :bullettrain_front: | `:bullettrain_front:` | Chore changes like a bullet |
-| :test_tube: | `:test_tube:` | Unit tests |
+| :bug: | `:bug:` | Bug fixing |
+| :bullettrain_front: | `:bullettrain_front:` | For chore changes |
+| :test_tube: | `:test_tube:` | Unit tests adjustments |
+| :rocket: | `:rocket:` | CI/CD changes |
