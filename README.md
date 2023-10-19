@@ -14,3 +14,16 @@ sudo docker-compose restart
 
 sudo docker-compose unpause  #pause
 ```
+
+
+## Emoji Base
+| Emoji | Github text | Description |
+| :------: | -------------- | --------------- |
+| :heavy_plus_sign: | `:heavy_plus_sign:` | Add new feature |
+| :factory_worker: | `:factory_worker:` | _Work in progress..._ |
+| :memo: | `:memo:` | Modify existing functionalities |
+| :wrench: | `:wrench:` | Refactor & Clean-up |
+| :writing_hand: | `:writing_hand:` | Update documentation |
+| :rescue_worker_helmet: | `:rescue_worker_helmet:` | Relevant bug fixing |
+| :broom: | `:broom:` | Tiny bug fixing |
+| :test_tube: | `:test_tube:` | Unit tests |

@@ -7,7 +7,7 @@ Get total free disk space using text processing tool: **`awk`**
 df -h / | awk 'NR==2 {print $4}'
 ```
 
-<hr>
+## Output manipulation
 
 Use **`jq`** tool to process _json_ input
 ```sh
