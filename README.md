@@ -26,4 +26,5 @@ sudo docker-compose unpause  #pause
 | :writing_hand: | `:writing_hand:` | Update documentation |
 | :rescue_worker_helmet: | `:rescue_worker_helmet:` | Relevant bug fixing |
 | :broom: | `:broom:` | Tiny bug fixing |
+| :bullettrain_front: | `:bullettrain_front:` | Chore changes like a bullet |
 | :test_tube: | `:test_tube:` | Unit tests |
