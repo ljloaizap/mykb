@@ -4,13 +4,14 @@ from faker import Faker
 from sqlalchemy import create_engine
 import argparse
 import csv
+import math
 import os
 import pandas as pd
 import random
 
 
 load_dotenv()
-start_date = datetime(2023, 10, 18, 1, 22, 0)
+min_date = datetime(2023, 10, 18, 1, 20, 0)
 ENGINE = create_engine(os.getenv('DB_CONN_STR'))
 DIR_DATA = "./data/"  # Directory where the CSV reports will be saved
 
@@ -34,27 +35,55 @@ def introduce_errors(data):
     return data
 
 
-def generate_csv_file(current_timestamp: datetime, end_timestamp: datetime, force: bool):
+def generate_csv_file(ini_date: datetime, end_date: datetime, file_number: int, flg_force: bool):
     '''PH'''
-    csv_file_name = f"{DIR_DATA}product_{current_timestamp.strftime('%Y%m%d-%H%M%S')}.csv"
-    if os.path.exists(csv_file_name) and not force:
-        print(f'{csv_file_name} already exists...')
+    csv_file_name = f"{DIR_DATA}product_{ini_date.strftime('%Y%m%d-%H%M%S')}.csv"
+    message = f'File #{file_number} ({csv_file_name}): '
+    if os.path.exists(csv_file_name) and not flg_force:
+        message += 'already exists...'
     else:
-        sql_query = f"SELECT * FROM e_commerce.product WHERE created_at >= '{current_timestamp}' AND created_at < '{end_timestamp}'"
-        df = pd.read_sql_query(sql_query, ENGINE)
-        df = introduce_errors(df)
-        df.to_csv(csv_file_name, index=False, quoting=csv.QUOTE_NONNUMERIC)
-        print(f"CSV report generated and saved to: {csv_file_name}")
+        sql_query = f"""
+            SELECT *
+            FROM e_commerce.product
+            WHERE created_at >= '{ini_date}' AND created_at <= '{end_date}'
+        """
+        df = pd.read_sql(sql_query, ENGINE)
+        if df.shape[0] == 0:
+            message += 'no records found'
+        else:
+            df = introduce_errors(df)
+            df.to_csv(csv_file_name, index=False, quoting=csv.QUOTE_NONNUMERIC)
+            message += '.CSV file was generated successfully'
+    print(message)
 
 
-def main(force: bool):
+def main(flg_force: bool, flg_min_date: bool):
     '''PH'''
-    current_timestamp = start_date
-    # Infinite loop to generate CSV reports between specified interval
+    flg_force = flg_force or not flg_min_date
+    ini_date = get_start_date(flg_min_date)
+    file_number = 0
     while True:
-        end_timestamp = current_timestamp + timedelta(minutes=10, seconds=-1)
-        generate_csv_file(current_timestamp, end_timestamp, force)
-        current_timestamp = end_timestamp + timedelta(seconds=1)
+        file_number += 1
+        end_date = ini_date + timedelta(minutes=10, seconds=-1)
+        generate_csv_file(ini_date, end_date, file_number, flg_force)
+        ini_date = end_date + timedelta(seconds=1)
+
+        if ini_date > datetime.now():
+            print('-- !! Done. No more files will be generated. --')
+            break
+
+
+def get_start_date(flg_min_date: bool):
+    '''PH'''
+
+    if flg_min_date:
+        return min_date
+
+    current_time = datetime.now()
+    new_minutes = math.floor(current_time.minute / 10) * 10
+    new_start_date = (current_time.replace(
+        minute=new_minutes, second=0) - timedelta(minutes=10))
+    return new_start_date
 
 
 if __name__ == "__main__":
@@ -63,5 +92,8 @@ if __name__ == "__main__":
     parser.add_argument('-f', '--force',
                         action='store_true',
                         help='.CSV will be generated even if they already exist for N-interval')
+    parser.add_argument('-m', '--min_date',
+                        action='store_true',
+                        help='Data generation will start from the min date. If not, it will use now().')
     args = parser.parse_args()
-    main(args.force)
+    main(args.force, args.min_date)
