@@ -16,6 +16,29 @@ sudo docker-compose unpause  #pause
 ```
 
 
+
+# KB Jupyter Notebook
+
+Install python virtual env as kernel to run Jupyter notebooks
+```sh
+pipenv install jupyter
+pipenv install ipykernel
+pipenv run python -m ipykernel install --user --name=<virtual_env_name>
+jupyter notebook  # init jupyter
+```
+
+Command for this project
+```sh
+pipenv run python -m ipykernel install --user --name=kb_jupyter
+```
+
+Kernel spec
+```sh
+jupyter kernelspec list
+jupyter kernelspec uninstall pandasprom
+```
+
+
 ## Emoji Base
 | Emoji | Emoji name | Description |
 | :------: | -------------- | --------------- |

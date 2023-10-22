@@ -1,5 +1,6 @@
 .vscode
-/*/data_generator/data/
+/*/data_generator/data*/
+/*/*/.ipynb_checkpoints/*
 
 Pipfile
 Pipfile.lock
