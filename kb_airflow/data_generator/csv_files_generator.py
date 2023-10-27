@@ -13,7 +13,7 @@ import random
 load_dotenv()
 min_date = datetime(2023, 10, 18, 1, 20, 0)
 ENGINE = create_engine(os.getenv('DB_CONN_STR'))
-DIR_DATA = "./data/"  # Directory where the CSV reports will be saved
+DIR_DATA = "./data_dag1/"  # Directory where the CSV reports will be saved
 
 
 def introduce_errors(data):
@@ -68,7 +68,7 @@ def main(flg_force: bool, flg_min_date: bool):
         generate_csv_file(ini_date, end_date, file_number, flg_force)
         ini_date = end_date + timedelta(seconds=1)
 
-        if ini_date > datetime.now():
+        if ini_date > datetime.now() + timedelta(hours=5):  # +5 to cover UTC gap
             print('-- !! Done. No more files will be generated. --')
             break
 
