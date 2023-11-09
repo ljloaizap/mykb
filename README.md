@@ -13,6 +13,9 @@ sudo docker-compose -f _filename_.yml up -d
 sudo docker-compose restart
 
 sudo docker-compose unpause  #pause
+
+# cd /MyKB/kb_airflow/data_generator, and:
+sudo docker cp data_dag1/. 415:/opt/airflow/data_generator/data_dag1/. #kind-of refresh
 ```
 
 
