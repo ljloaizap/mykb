@@ -14,6 +14,13 @@ Use **`jq`** tool to process _json_ input
 echo '{"name": "John", "age": 30, "city": "New York"}' | jq -c '.city'
 ```
 
+## Text viewer
+
+`{command} | less`, and later `/` to search for a string, e.g.:
+```
+python --help | less` and then, `/ {search phrase}
+```
+
 ## Network
 
 Check if a service is available in a specific port with `telnet`.
