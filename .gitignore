@@ -2,6 +2,10 @@
 /*/data_generator/data*/
 /*/*/.ipynb_checkpoints/*
 
+/*/spark-3.2.4*
+*/Scala/*/project/*
+*/Scala/*/target/*
+
 Pipfile
 Pipfile.lock
 .env

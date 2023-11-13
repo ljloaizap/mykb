@@ -1,7 +1,37 @@
 # My Knowledge Base (KB)
 My journey while learning overall stuff, just in one single place to edit and look for !!!
 
-- For Commit Messages: [<Module>] <Topic>: Title
+- For Commit Messages: _"[Module] Topic: Title"_
+
+# KB Spark
+
+### Env var
+```
+export SPARK_HOME=.../MyKB/kb_spark/spark-3.2.4-bin-hadoop2.7
+export PATH=$PATH:$SPARK_HOME/bin
+```
+
+### Open shell
+Cd `/kb_spark/spark-3.2.4-bin-hadoop2.7/bin` dir and enter any of the available shells:
+- `./pyspark` for _python_
+- `./spark-shell` for _scala_
+
+### Spark submit
+
+**Python**
+```
+# Spark job for M&M count
+$SPARK_HOME/bin/spark-submit Python/ch2_count_agg_mnm.py data/mnm_dataset.csv
+```
+
+**Scala:** cd dir where `.scala` files are located
+```
+sbt clean package
+$SPARK_HOME/bin/spark-submit --class main.scala.chapter2.MnMcount target/scala-2.12/main-scala-chapter2_2.12-1.0.jar ../../data/mnm_dataset.csv
+```
+
+### Links
+- _[LearningSparkV2](https://github.com/databricks/LearningSparkV2)_
 
 
 # KB Airflow
