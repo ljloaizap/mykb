@@ -18,9 +18,16 @@ Cd `/kb_spark/spark-3.2.4-bin-hadoop2.7/bin` dir and enter any of the available 
 
 ### Spark submit
 
+**Python**
 ```
 # Spark job for M&M count
 $SPARK_HOME/bin/spark-submit Python/ch2_count_agg_mnm.py data/mnm_dataset.csv
+```
+
+**Scala:** cd dir where `.scala` files are located
+```
+sbt clean package
+$SPARK_HOME/bin/spark-submit --class main.scala.chapter2.MnMcount target/scala-2.12/main-scala-chapter2_2.12-1.0.jar ../../data/mnm_dataset.csv
 ```
 
 ### Links
