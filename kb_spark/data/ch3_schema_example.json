@@ -1,0 +1,39 @@
+[
+    {
+        "Id": 1,
+        "First": "Jules",
+        "Last": "Damji",
+        "Url": "https://tinyurl.1",
+        "Published": "1/4/2016",
+        "Hits": 4535,
+        "Campaings": [
+            "twitter",
+            "linkedin"
+        ]
+    },
+    {
+        "Id": 2,
+        "First": "Brooke",
+        "Last": "Wenig",
+        "Url": "https://tinyurl.2",
+        "Published": "5/5/2018",
+        "Hits": 8908,
+        "Campaings": [
+            "twitter",
+            "linkedin"
+        ]
+    },
+    {
+        "Id": 3,
+        "First": "Denny",
+        "Last": "Lee",
+        "Url": "https://tinyurl.3",
+        "Published": "6/7/2019",
+        "Hits": 7659,
+        "Campaings": [
+            "web",
+            "twitter",
+            "FB"
+        ]
+    }
+]
