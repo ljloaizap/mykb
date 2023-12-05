@@ -6,6 +6,7 @@ package main.scala.chapter3
 
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types._
+import org.apache.spark.sql.functions._
 
 object Schema_Example3_7 {
     def main(args: Array[String]) {
@@ -40,6 +41,39 @@ object Schema_Example3_7 {
         blogsDF.printSchema()
         println(">> DataFrame Content:")
         blogsDF.show()
+
+        // ######################### Playing with columns #########################
+        println(">> Print columns")
+        println(blogsDF.columns)
+
+        println(">> Print 'Id' column")
+        println(blogsDF.col("Id"))
+
+        println(">> Computing a value")
+        blogsDF.select(expr("Hits * 2")).show(2)
+        blogsDF.select(col("Hits") * 2).show(3)
+
+        println(">> Adding new column based on some criteria/condition")
+        blogsDF
+            .withColumn("Big hitter", (expr("Hits > 10568")))
+            .withColumn("Big hitter II", col("Hits") > 10568).show()
+
+        println(">> Concatenating multiple columns in a new one")
+        blogsDF
+            .withColumn("AuthorsId", (concat(expr("First"),expr("Last"),expr("Id"))))
+            .select(col("AuthorsId"))
+            .show(4)
+
+        // println(">> Selecting specific column with any 3 diff statements")
+        // blogsDF.select(expr("Hits")).show(2)
+        // blogsDF.select(col("Hits")).show(2)
+        // blogsDF.select("Hits").show(2)
+
+        println(">> Sorting dataframe by Id in descending order")
+        blogsDF.sort(col("Id").desc).show()
+        println(">> Sorting dataframe by Hits in asc order")
+        blogsDF.sort($("Hits")).show()
+
 
         println(">> Yay! Yay!")
    }
